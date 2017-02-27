@@ -2,7 +2,7 @@
 # Two strain model
 #######################################
 rm(list=ls())
-# Authors: B.S. Cooper & E. van Kleef
+# Authors: B.S. Cooper with adjustments from E. van Kleef
 # Date: 30 January 2017
 
 library(deSolve)
