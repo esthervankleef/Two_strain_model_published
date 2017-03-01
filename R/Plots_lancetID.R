@@ -1,5 +1,5 @@
 #############################################
-# FIGURES CDI model - Lancet ID correspondance
+# FIGURES CDI model - Lancet ID correspondence
 #############################################
 
 
