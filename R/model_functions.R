@@ -7,7 +7,7 @@ rm(list=ls())
 
 library(deSolve)
 require(manipulate)
-script.name.cdi = "hosp_com"
+
 # **********************************************************************************
 # time.int is the the time of the hand hygiene intervention
 # new.hhfreq is the hand hygiene level after the intervention.
