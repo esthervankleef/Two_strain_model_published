@@ -2,17 +2,17 @@
 # Two strain model
 #######################################
 rm(list=ls())
-# Authors: B.S. Cooper with adjustments from E. van Kleef
+# Authors: B.S. Cooper & E. van Kleef
 # Date: 30 January 2017
 
 library(deSolve)
 require(manipulate)
-
+script.name.cdi = "hosp_com"
 # **********************************************************************************
 # time.int is the the time of the hand hygiene intervention
 # new.hhfreq is the hand hygiene level after the intervention.
 
-modCDI.dyn <- function(t,var,par) { 
+mod.dyn <- function(t,var,par) { 
   # Basic model for two strains in competition allowing for a hand hygiene intervention
   # With transmission in the hospital and community 
   # And explicitly modelling HCW and hand-borne transmssion
@@ -239,3 +239,341 @@ calcR0B.fqr<-function(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,m
   return(list(R0=R0, ngm=ngm))
 }
 
+# Function to plot prevalence
+plot.model<-function(Slider.betaA1.hcw2p,Slider.betaA1.p2hcw ,Slider.betaA2,Slider.betaA3,Slider.betaB1.hcw2p, Slider.betaB1.p2hcw,Slider.betaB2,Slider.betaB3, Slider.hhfreq, Slider.time.int,Slider.newhhfreq,time){
+  betaA1.hcw2p<-Slider.betaA1.hcw2p
+  betaA1.p2hcw<-Slider.betaA1.p2hcw
+  betaA2<-Slider.betaA2
+  betaA3<-Slider.betaA3
+  betaB1.hcw2p<-Slider.betaB1.hcw2p 
+  betaB1.p2hcw<-Slider.betaB1.p2hcw
+  betaB2<-Slider.betaB2
+  betaB3<-Slider.betaB3
+  hhfreq<-Slider.hhfreq
+  time.int<-Slider.time.int
+  newhhfreq<- Slider.newhhfreq 
+  modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,newhhfreq,f23,f32)   
+  mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
+  mod.t <- seq(0,time,by=1) 
+  mod.sol <- lsoda(mod.init,mod.t,mod.dyn ,modpars)
+  N1<-S1.t0+A1.t0+B1.t0
+  N2<-S2.t0+A2.t0+B2.t0
+  N3<-S3.t0+A3.t0+B3.t0
+  
+  TIME <- mod.sol[,1] 
+  A1 <- mod.sol[,3]/N1 
+  B1 <- mod.sol[,4]/N1 
+  A2 <- mod.sol[,6]/N2
+  B2 <- mod.sol[,7]/N2
+  A3 <- mod.sol[,9]/N3
+  B3 <- mod.sol[,10]/N3
+  
+  A2and3<- (mod.sol[,6]+mod.sol[,9])/(N2+N3)
+  B2and3<- (mod.sol[,7]+mod.sol[,10])/(N2+N3)
+  
+  plot(TIME, A1, type='l', xlab="Year",ylab="Prevalence",col="red",main="Hospital and community prevalence",ylim=c(0,1),xaxt='n')
+  max.yr<-round(max(TIME)/365)
+  axis(side=1,at=(0:max.yr)*365,labels=0:max.yr)
+  lines(TIME,A2and3,  col="plum",lty=2)
+  lines(TIME, B1,  col="blue",lty=1)  
+  lines(TIME,B2and3,  col="steelblue4",lty=2)
+  legend("topright",c("Hospital A","Community A","Hospital B", "Community B"), lty=c(1,2,1,2),col=c("red", "plum", "blue","steelblue4"))
+  
+  R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, Slider.hhfreq,c,f23,f32)
+  text(0,1.0,paste("R0 =",round(R0etc$R0,2)),pos=4)
+  text(0,0.9,paste("R11 =",round(R0etc$ngm[1,1],2)),pos=4)
+  text(0,0.84,paste("R22 =",round(R0etc$ngm[2,2],2)),pos=4)
+  text(0,0.78,paste("R23 =",round(R0etc$ngm[2,3],2)),pos=4)
+  text(0,0.72,paste("R33 =",round(R0etc$ngm[3,3],2)),pos=4)
+  text(0,0.66,paste("R32 =",round(R0etc$ngm[3,2],2)),pos=4)
+  print(R0etc$ngm)
+}
+
+# Function to plot incidence
+plot.model.inc<-function(Slider.betaA1.hcw2p,Slider.betaA1.p2hcw ,Slider.betaA2,Slider.betaA3,Slider.betaB1.hcw2p, Slider.betaB1.p2hcw,Slider.betaB2,Slider.betaB3, Slider.hhfreq, Slider.time.int,Slider.newhhfreq,time){
+  betaA1.hcw2p<-Slider.betaA1.hcw2p
+  betaA1.p2hcw<-Slider.betaA1.p2hcw
+  betaA2<-Slider.betaA2
+  betaA3<-Slider.betaA3
+  betaB1.hcw2p<-Slider.betaB1.hcw2p 
+  betaB1.p2hcw<-Slider.betaB1.p2hcw
+  betaB2<-Slider.betaB2
+  betaB3<-Slider.betaB3
+  hhfreq<-Slider.hhfreq
+  time.int<-Slider.time.int
+  newhhfreq<- Slider.newhhfreq 
+  modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,newhhfreq,f23,f32)   
+  mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
+  mod.t <- seq(0,time,by=1) 
+  mod.sol <- lsoda(mod.init,mod.t,mod.dyn ,modpars)
+  N1<-S1.t0+A1.t0+B1.t0
+  N2<-S2.t0+A2.t0+B2.t0
+  N3<-S3.t0+A3.t0+B3.t0
+  
+  TIME <- mod.sol[,1] 
+  A1 <- mod.sol[,14] 
+  B1 <- mod.sol[,17] 
+  A2 <- mod.sol[,15]
+  B2 <- mod.sol[,18]
+  A3 <- mod.sol[,16]
+  B3 <- mod.sol[,19]
+  
+  A2and3<- (mod.sol[,15]+mod.sol[,16])
+  B2and3<- (mod.sol[,18]+mod.sol[,19])
+  
+  plot(TIME, A1, type='l', xlab="Year",ylab="Incidence per 10 000 person-days",col="red",main="Hospital and community incidence",ylim=c(0,300),xaxt='n')
+  max.yr<-round(max(TIME)/365)
+  axis(side=1,at=(0:max.yr)*365,labels=0:max.yr)
+  lines(TIME,A2and3,  col="plum",lty=2)
+  lines(TIME, B1,  col="blue",lty=1)  
+  lines(TIME,B2and3,  col="steelblue4",lty=2)
+  legend("topright",c("Hospital A","Community A","Hospital B", "Community B"), lty=c(1,2,1,2),col=c("red", "plum", "blue","steelblue4"))
+  
+  R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, Slider.hhfreq,c,f23,f32)
+  text(0,1.0*50,paste("R0 =",round(R0etc$R0,2)),pos=4)
+  text(0,0.9*50,paste("R11 =",round(R0etc$ngm[1,1],2)),pos=4)
+  text(0,0.84*50,paste("R22 =",round(R0etc$ngm[2,2],2)),pos=4)
+  text(0,0.78*50,paste("R23 =",round(R0etc$ngm[2,3],2)),pos=4)
+  text(0,0.72*50,paste("R33 =",round(R0etc$ngm[3,3],2)),pos=4)
+  text(0,0.66*50,paste("R32 =",round(R0etc$ngm[3,2],2)),pos=4)
+  print(R0etc$ngm)
+}
+
+# Calculate fraction of transmissions occuring in the community vs hospital
+f.trans <-function(Slider.betaA1.hcw2p,Slider.betaA1.p2hcw,Slider.betaA2,Slider.betaA3,Slider.betaB1.hcw2p,Slider.betaB1.p2hcw,Slider.betaB2,Slider.betaB3,time,f23,f32){
+  betaA1.hcw2p<-Slider.betaA1.hcw2p
+  betaA1.p2hcw<-Slider.betaA1.p2hcw
+  betaA2<-Slider.betaA2
+  betaA3<-Slider.betaA3
+  betaB1.hcw2p<-Slider.betaB1.hcw2p 
+  betaB1.p2hcw<-Slider.betaA1.p2hcw
+  betaB2<-Slider.betaB2
+  betaB3<-Slider.betaB3
+  time.int <-time-365
+  modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,newhhfreq,f23,f32)   
+  mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
+  mod.t <- seq(0,time,by=1) 
+  mod.sol <- lsoda(mod.init,mod.t,mod.dyn ,modpars)
+  N1<-S1.t0+A1.t0+B1.t0
+  N2<-S2.t0+A2.t0+B2.t0
+  N3<-S3.t0+A3.t0+B3.t0
+  
+  TIME <- mod.sol[,1] 
+  A1 <- mod.sol[,3]/N1 
+  B1 <- mod.sol[,4]/N1 
+  A2 <- mod.sol[,6]/N2
+  B2 <- mod.sol[,7]/N2
+  A3 <- mod.sol[,9]/N3
+  B3 <- mod.sol[,10]/N3
+  A2and3<- (mod.sol[,6]+mod.sol[,9])/(N2+N3)
+  B2and3<- (mod.sol[,7]+mod.sol[,10])/(N2+N3)
+  
+  S1.p <- mod.sol[time.int,2]
+  S2.p <- mod.sol[time.int,5]
+  S3.p <- mod.sol[time.int,8]
+  A1.p <- mod.sol[time.int,3]
+  A2.p <- mod.sol[time.int,6]
+  A3.p <- mod.sol[time.int,9]
+  B1.p <- mod.sol[time.int,4]
+  B2.p <- mod.sol[time.int,7]
+  B3.p <- mod.sol[time.int,10]
+  H.A1.p <- mod.sol[time.int,11]
+  H.B1.p <- mod.sol[time.int,12]
+
+  plot(TIME, A1, type='l', xlab="Year",ylab="Prevalence",col="red",main="Hospital and community prevalence",ylim=c(0,1),xaxt='n')
+  max.yr<-round(max(TIME)/365)
+  axis(side=1,at=(0:max.yr)*365,labels=0:max.yr)
+  lines(TIME,A2and3,  col="plum",lty=2)
+  lines(TIME, B1,  col="blue",lty=1)  
+  lines(TIME,B2and3,  col="steelblue4",lty=2)
+  legend("topright",c("Hospital A","Community A","Hospital B", "Community B"), lty=c(1,2,1,2),col=c("red", "plum", "blue","steelblue4"))
+  
+  R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, hhfreq,c,f23,f32)
+  text(0,1.0,paste("R0 =",round(R0etc$R0,2)),pos=4)
+  text(0,0.9,paste("R11 =",round(R0etc$ngm[1,1],2)),pos=4)
+  text(0,0.84,paste("R22 =",round(R0etc$ngm[2,2],2)),pos=4)
+  text(0,0.78,paste("R23 =",round(R0etc$ngm[2,3],2)),pos=4)
+  text(0,0.72,paste("R33 =",round(R0etc$ngm[3,3],2)),pos=4)
+  text(0,0.66,paste("R32 =",round(R0etc$ngm[3,2],2)),pos=4)
+  print(R0etc)
+  print(R0Betc)
+  
+  # Force of infection 
+  foi_A2 <- betaA2*A2.p/N2 + betaA3*A3.p*f23/N2 
+  foi_A3 <- betaA3*A3.p/N3 + betaA2*A2.p*f32/N3
+  foi_B2 <- betaB2*B2.p/N2 + betaB3*B3.p*f23/N2
+  foi_B3 <- betaB3*B3.p/N3 + betaB2*B2.p*f32/N3
+  
+  # Switch from A --> B and B --> A
+  A2toB2 <- betaBA2*B2.p/N2 + betaBA3*B3.p*f23/N2 
+  A3toB3 <- betaBA3*B3.p/N3 + betaBA2*B2.p*f32/N3 
+  B2toA2 <- betaAB2*A2.p/N2 + betaAB3*A3.p*f23/N2 
+  B3toA3 <- betaAB3*A3.p/N3 + betaAB2*A2.p*f32/N3 
+  
+  Inc_A1 <- betaA1.hcw2p*S1.p*H.A1.p/n.hcw + betaAB1.hcw2p*B1.p*H.A1.p/n.hcw
+  Inc_A2 <- foi_A2*S2.p + B2toA2*B2.p  
+  Inc_A3 <- foi_A3*S3.p + B3toA3*B3.p
+  Inc_B1 <- betaB1.hcw2p*S1.p*H.B1.p/n.hcw + betaBA1.hcw2p*A1.p*H.B1.p/n.hcw
+  Inc_B2 <- foi_B2*S2.p + A2toB2*A2.p
+  Inc_B3 <- foi_B3*S3.p + A3toB3*A3.p
+  
+  f_Ah <- round(Inc_A1/(Inc_A1+Inc_A2+Inc_A3),3)
+  f_Bh <- round(Inc_B1/(Inc_B1+Inc_B2+Inc_B3),3)
+  print(paste("f_Ah = ", f_Ah, "f_Bh = ", f_Bh))
+  
+}
+
+# Find transmission parameters under different levels of hospital adaptation for sensitivity analysis
+find.R0 <- function(lhs, out,time,time.int,path,hhfreq){
+  for(i in 1:length(lhs[,1])){
+    print(i)
+    betaA1.hcw2p = ifelse(path=="A", lhs[i,1],betaA1.hcw2p)
+    betaA1.p2hcw = betaA1.hcw2p*10 
+    betaA2 = ifelse(path=="A", lhs[i,2],betaA2)
+    betaA3 = betaA2
+    
+    betaB1.hcw2p = ifelse(path=="B", lhs[i,1],betaB1.hcw2p)
+    betaB1.p2hcw = betaB1.hcw2p*10 
+    betaB2 = ifelse(path=="B", lhs[i,2],betaB2)
+    betaB3 = betaB2
+    
+    new.hhfreq = hhfreq
+    time.int = time.int
+    modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,new.hhfreq,f23,f32)   
+    mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
+    mod.t <- seq(0,time,by=1) 
+    mod.sol <- lsoda(mod.init,mod.t,mod.dyn ,modpars)
+    
+    N1<-S1.t0+A1.t0+B1.t0
+    N2<-S2.t0+A2.t0+B2.t0
+    N3<-S3.t0+A3.t0+B3.t0
+    
+    TIME <- mod.sol[,1] 
+    A1 <- mod.sol[,3]/N1 
+    B1 <- mod.sol[,4]/N1 
+    A2 <- mod.sol[,6]/N2
+    B2 <- mod.sol[,7]/N2
+    A3 <- mod.sol[,9]/N3
+    B3 <- mod.sol[,10]/N3
+    A2and3<- (mod.sol[,6]+mod.sol[,9])/(N2+N3)
+    B2and3<- (mod.sol[,7]+mod.sol[,10])/(N2+N3)
+    
+    S1.p <- mod.sol[time.int,2]
+    S2.p <- mod.sol[time.int,5]
+    S3.p <- mod.sol[time.int,8]
+    A1.p <- mod.sol[time.int,3]
+    A2.p <- mod.sol[time.int,6]
+    A3.p <- mod.sol[time.int,9]
+    B1.p <- mod.sol[time.int,4]
+    B2.p <- mod.sol[time.int,7]
+    B3.p <- mod.sol[time.int,10]
+    H.A1.p <- mod.sol[time.int,11]
+    H.B1.p <- mod.sol[time.int,12]
+    
+    # Force of infection 
+    foi_A2 <- betaA2*A2.p/N2 + betaA3*A3.p*f23/N2 
+    foi_A3 <- betaA3*A3.p/N3 + betaA2*A2.p*f32/N3
+    foi_B2 <- betaB2*B2.p/N2 + betaB3*B3.p*f23/N2
+    foi_B3 <- betaB3*B3.p/N3 + betaB2*B2.p*f32/N3
+    
+    # Switch from A --> B and B --> A
+    A2toB2 <- betaBA2*B2.p/N2 + betaBA3*B3.p*f23/N2 
+    A3toB3 <- betaBA3*B3.p/N3 + betaBA2*B2.p*f32/N3 
+    B2toA2 <- betaAB2*A2.p/N2 + betaAB3*A3.p*f23/N2 
+    B3toA3 <- betaAB3*A3.p/N3 + betaAB2*A2.p*f32/N3 
+    
+    Inc_A1 <- betaA1.hcw2p*S1.p*H.A1.p/n.hcw + betaAB1.hcw2p*B1.p*H.A1.p/n.hcw
+    Inc_A2 <- foi_A2*S2.p + B2toA2*B2.p  
+    Inc_A3 <- foi_A3*S3.p + B3toA3*B3.p
+    Inc_B1 <- betaB1.hcw2p*S1.p*H.B1.p/n.hcw + betaBA1.hcw2p*A1.p*H.B1.p/n.hcw
+    Inc_B2 <- foi_B2*S2.p + A2toB2*A2.p
+    Inc_B3 <- foi_B3*S3.p + A3toB3*A3.p
+    
+    f_Ah <- round(Inc_A1/(Inc_A1+Inc_A2+Inc_A3),3)
+    f_Bh <- round(Inc_B1/(Inc_B1+Inc_B2+Inc_B3),3)
+    
+    R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, hhfreq,c,f23,f32)
+    R0Betc<-calcR0B.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muB1,muB2,muB3,betaB1.hcw2p, betaB1.p2hcw,betaB2,betaB3,n.hcw,hhfreq,c,f23,f32)
+    R0A = R0etc$R0
+    R0B = R0Betc$R0
+    
+    out[i,1] = lhs[i,1]
+    out[i,2] = lhs[i,2]
+    out[i,3] = R0A
+    out[i,4] = R0B
+    out[i,5] = f_Ah
+    out[i,6] = f_Bh
+    print(ifelse(path=="A",R0A,R0B))
+    print(ifelse(path=="A",f_Ah,f_Bh))
+  }
+  return(out)
+}
+
+# Calculate IRR under different levels of hospital adaptation for sensitivity analysis
+frac.h.sens <- function(sets,sets2,sens.values,time,time.int,newhhfreq.vec){
+  out = data.frame(matrix(nrow=sets*sets2, ncol=10))
+  names(out) = c("fhA","fhB","preA1","preA2and3","preB1","preB2and3",
+                 "postA1","postA2and3","postB1","postB2and3")
+  for(i in 1:sets){
+    print(i)
+    betaA1.hcw2p = sens.values$betaA_hcw2p[i]
+    betaA1.p2hcw = betaA1.hcw2p*10
+    betaA2 = sens.values$betaA2[i]
+    betaA3 = betaA2
+    for(b in 1:sets2){
+      print(b)
+      betaB1.hcw2p = sens.values$betaB_hcw2p[b]
+      betaB1.p2hcw = betaB1.hcw2p*10
+      betaB2 = sens.values$betaB2[b]
+      betaB3 = betaB2
+      newhhfreq<-newhhfreq.vec
+      time.int<-365000
+      modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,newhhfreq,f23,f32)   
+      mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
+      mod.t <- seq(0,730000,by=10) 
+      mod.sol <- lsoda(mod.init,mod.t,mod.dyn,modpars)
+      
+      Iint = time.int/10
+      # INCIDENCE PER DAY
+      out$fhA[(i-1)*sets2+b] <- sens.values$fh[i]
+      out$fhB[(i-1)*sets2+b] <- sens.values$fh[b]
+      out$preA1[(i-1)*sets2+b] <- sum(mod.sol[(Iint-365):Iint,20]) 
+      out$preB1[(i-1)*sets2+b] <- sum(mod.sol[(Iint-365):Iint,23]) 
+      out$preA2and3[(i-1)*sets2+b]<- sum(mod.sol[(Iint-365):Iint,21]+mod.sol[Iint:(Iint-365),22])
+      out$preB2and3[(i-1)*sets2+b]<- sum(mod.sol[(Iint-365):Iint,24]+mod.sol[Iint:(Iint-365),25])
+      
+      out$postA1[(i-1)*sets2+b] <- sum(mod.sol[Iint:(Iint+365),20]) 
+      out$postB1[(i-1)*sets2+b] <- sum(mod.sol[Iint:(Iint+365),23]) 
+      out$postA2and3[(i-1)*sets2+b]<- sum(mod.sol[Iint:(Iint+365),21]+mod.sol[Iint:(Iint+365),22])
+      out$postB2and3[(i-1)*sets2+b] <- sum(mod.sol[Iint:(Iint+365),24]+mod.sol[Iint:(Iint+365),25])
+    }
+  }
+  return(out)
+}
+
+# Check single admission reproduction numbers (i.e. secondary infections in pop1 due to infected in pop1)
+single.adm.r0 <- function(sets,sets2,sens.values){
+  out = data.frame(matrix(nrow=sets*sets2, ncol=4))
+  names(out) = c("fhA","fhB","RA1.1","RB1.1")
+  for(i in 1:sets){
+  print(i)
+  betaA1.hcw2p = sens.values$betaA_hcw2p[i]
+  betaA1.p2hcw = betaA1.hcw2p*10
+  betaA2 = sens.values$betaA2[i]
+  betaA3 = betaA2
+  for(b in 1:sets2){
+    betaB1.hcw2p = sens.values$betaB_hcw2p[b]
+    betaB1.p2hcw = betaB1.hcw2p*10
+    betaB2 = sens.values$betaB2[b]
+    betaB3 = betaB2
+    R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, hhfreq,c,f23,f32)
+    R0Betc<-calcR0B.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muB1,muB2,muB3,betaB1.hcw2p, betaB1.p2hcw,betaB2,betaB3,n.hcw,hhfreq,c,f23,f32)
+    out$fhA[(i-1)*sets2+b] <- sens.values$fh[i]
+    out$fhB[(i-1)*sets2+b] <- sens.values$fh[b]
+    out$RA1.1[(i-1)*sets2+b] = R0etc$ngm[1,1]
+    out$RB1.1[(i-1)*sets2+b] = R0Betc$ngm[1,1]
+    }
+  }
+  return(out)
+}
+    
