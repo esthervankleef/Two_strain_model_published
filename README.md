@@ -1,6 +1,10 @@
 # Two strain model 
 
-This model simulates the transmission dynamics of a hospital adapted resistant strain and a community adapted sensitive strain in the hospital and community, and simulates the impact of a hand hygiene intervention on the incidence and prevalence of both strains. 
+This model simulates the transmission dynamics of two competing strains, i.e. a hospital-adapted resistant strain and a community-adapted sensitive strain. 
+
+It has been argued that since infection control measures, such as hand hygiene, should affect resistant and sensitive strains equally, 
+observed discordant changes must have largely resulted from other factors, such as changes in antibiotic use. 
+This model is used to test the validity of this reasoning.
 
 Model_functions.R contains all functions including the model, plotting functions and functions to calculate R0.
 
