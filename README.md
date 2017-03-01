@@ -1,4 +1,4 @@
-# Two strain model 
+# Why susceptible bacteria are resistant to  hospital infection control
 
 This model simulates the transmission dynamics of two competing strains, i.e. a hospital-adapted resistant strain and a community-adapted sensitive strain. 
 
