@@ -551,29 +551,3 @@ frac.h.sens <- function(sets,sets2,sens.values,time,time.int,newhhfreq.vec){
   return(out)
 }
 
-# Check single admission reproduction numbers (i.e. secondary infections in pop1 due to infected in pop1)
-single.adm.r0 <- function(sets,sets2,sens.values){
-  out = data.frame(matrix(nrow=sets*sets2, ncol=4))
-  names(out) = c("fhA","fhB","RA1.1","RB1.1")
-  for(i in 1:sets){
-  print(i)
-  betaA1.hcw2p = sens.values$betaA_hcw2p[i]
-  betaA1.p2hcw = betaA1.hcw2p*10
-  betaA2 = sens.values$betaA2[i]
-  betaA3 = betaA2
-  for(b in 1:sets2){
-    betaB1.hcw2p = sens.values$betaB_hcw2p[b]
-    betaB1.p2hcw = betaB1.hcw2p*10
-    betaB2 = sens.values$betaB2[b]
-    betaB3 = betaB2
-    R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, hhfreq,c,f23,f32)
-    R0Betc<-calcR0B.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muB1,muB2,muB3,betaB1.hcw2p, betaB1.p2hcw,betaB2,betaB3,n.hcw,hhfreq,c,f23,f32)
-    out$fhA[(i-1)*sets2+b] <- sens.values$fh[i]
-    out$fhB[(i-1)*sets2+b] <- sens.values$fh[b]
-    out$RA1.1[(i-1)*sets2+b] = R0etc$ngm[1,1]
-    out$RB1.1[(i-1)*sets2+b] = R0Betc$ngm[1,1]
-    }
-  }
-  return(out)
-}
-    
