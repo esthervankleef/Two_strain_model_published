@@ -83,8 +83,6 @@ data_summary <- function(x) {
 }
 
 
-pdf("./Esther/RGNOSIS/Methods/CDI_lancetID/Figures/Figure1.pdf", width=6,height=5)
-
 print(ggplot(irr.data[!irr.data$type%in%c("All A","All B"),],aes(x=type,y=irr.median,col=path2,lty=factor(model),shape=factor(model)))+
         scale_y_log10(breaks = c(0,0.25,0.5,1,2,4),labels = c(0,0.25,0.5,1,2,4))+
         geom_point(size=4)+geom_hline(yintercept=1,lty=2)+
@@ -101,46 +99,9 @@ print(ggplot(irr.data[!irr.data$type%in%c("All A","All B"),],aes(x=type,y=irr.me
         scale_shape_manual("",values=c(20,18,20,18),labels=c("Dingle et al (2017)","Model output"))+
         guides(color=guide_legend(nrow=2,byrow=TRUE),
                shape=guide_legend(nrow=2,byrow=TRUE),linetype=F))
-dev.off()
-
-
-# Percentage occuring in hospital vs community 
-
-# FQR CDI
-fA.h=median(pirrA.h.pre/(pirrA.h.pre+pirrA.c.pre))
-fA.c=median(pirrA.c.pre/(pirrA.h.pre+pirrA.c.pre))
-
-fB.h=median(pirrB.h.pre/(pirrB.h.pre+pirrB.c.pre))
-fB.c=median(pirrB.c.pre/(pirrB.h.pre+pirrB.c.pre))
-
-overall_h = median((pirrA.h.pre+pirrB.h.pre)/(pirrA.h.pre+pirrB.h.pre+pirrA.c.pre+pirrB.c.pre))
-
 
 #################################
-
-# Alternative plot
-print(ggplot(irr.data.long,aes(x=type,y=irr,fill=path,group=var))+geom_vline(xintercept=4.5,col="grey",alpha=0.2)+geom_vline(xintercept=8.5,col="grey",alpha=0.2)+
-        geom_violin()+geom_hline(yintercept=1,lty=2)+
-        theme_bw()+ylab("IRR (per year)")+stat_summary(fun.data=data_summary,col="paleturquoise4",shape=18,size=0.8)+
-        scale_y_continuous(limits=c(0, 1.4),breaks=seq(0,1.4,0.2),labels=seq(0,1.4,0.2))+theme(axis.title.x=element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),
-                                                                                               axis.ticks.x=element_blank(),
-                                                                                               axis.text.x = element_text(hjust = 0.01),
-                                                                                               axis.text=element_text(size=10),
-                                                                                               legend.position="bottom")+scale_x_discrete("", labels = c("","Hospital","","",
-                                                                                                                                                         "","Community","","","",
-                                                                                                                                                         "Overall","","",""))+
-        scale_fill_manual("", values=c("darkslategray3",col2),labels=c("Resistant pathogen acquisitions",
-                                                                       "Sensitive pathogen acquisistions")) +
-        guides(fill=guide_legend(nrow=2,byrow=TRUE),col=F)+
-        geom_point(aes(x=type,y=cdi,col=type),shape=18,size=3)+
-        scale_colour_manual("",values=c("white","darkslategray3","white",col2,"white","darkslategray3","white",col2,"white","white","white","white"),
-                            labels=c("","","","","","","","","","","","")))
-
-
-
-
 # PLOT PREVALENCE
-pdf("./Esther/RGNOSIS/Methods/CDI_lancetID/Figures/PrevalenceCDI_FINAL.pdf", width=8,height=8)
 par(mfrow=c(2,2),oma=c(3,1,4,1),mar=c(1,4,1,1))
 
 time.int = 365000
@@ -201,10 +162,8 @@ mtext("Resistant pathogen",side=3,at=.3,line=2,outer=TRUE)
 mtext("Adapted to hospital",side=3,at=.3,line=1,outer=TRUE,cex=.75)
 mtext("Sensitive pathogen",side=3,at=.75,line=2,outer=TRUE)
 mtext("Adapted to community",side=3,at=.75,line=1,outer=TRUE,cex=.75)
-dev.off()
 
 # PLOT INCIDENCE
-pdf("./Esther/RGNOSIS/Methods/CDI_lancetID/Figures/IncidenceCDI_FINAL.pdf",width=8,height=8)
 par(mfrow=c(2,2),oma=c(3,1,4,1),mar=c(1,4,1,1))
 
 time.int = 365000
@@ -266,5 +225,4 @@ mtext("Resistant pathogen",side=3,at=.3,line=2,outer=TRUE)
 mtext("Adapted to hospital",side=3,at=.3,line=1,outer=TRUE,cex=.75)
 mtext("Sensitive pathogen",side=3,at=.75,line=2,outer=TRUE)
 mtext("Adapted to community",side=3,at=.75,line=1,outer=TRUE,cex=.75)
-dev.off()
 
