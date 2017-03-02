@@ -330,12 +330,12 @@ plot.model.inc<-function(Slider.betaA1.hcw2p,Slider.betaA1.p2hcw ,Slider.betaA2,
   legend("topright",c("Hospital A","Community A","Hospital B", "Community B"), lty=c(1,2,1,2),col=c("red", "plum", "blue","steelblue4"))
   
   R0etc<-calcR0.fqr(S1.t0,A1.t0, B1.t0,S2.t0,A2.t0, B2.t0,S3.t0,A3.t0, B3.t0,mS1,mA1,mB1,rho,muA1,muA2,muA3,betaA1.hcw2p,betaA1.p2hcw,betaA2,betaA3,n.hcw, Slider.hhfreq,c,f23,f32)
-  text(0,1.0*50,paste("R0 =",round(R0etc$R0,2)),pos=4)
-  text(0,0.9*50,paste("R11 =",round(R0etc$ngm[1,1],2)),pos=4)
-  text(0,0.84*50,paste("R22 =",round(R0etc$ngm[2,2],2)),pos=4)
-  text(0,0.78*50,paste("R23 =",round(R0etc$ngm[2,3],2)),pos=4)
-  text(0,0.72*50,paste("R33 =",round(R0etc$ngm[3,3],2)),pos=4)
-  text(0,0.66*50,paste("R32 =",round(R0etc$ngm[3,2],2)),pos=4)
+  text(0,1.0*300,paste("R0 =",round(R0etc$R0,2)),pos=4)
+  text(0,0.9*300,paste("R11 =",round(R0etc$ngm[1,1],2)),pos=4)
+  text(0,0.84*300,paste("R22 =",round(R0etc$ngm[2,2],2)),pos=4)
+  text(0,0.78*300,paste("R23 =",round(R0etc$ngm[2,3],2)),pos=4)
+  text(0,0.72*300,paste("R33 =",round(R0etc$ngm[3,3],2)),pos=4)
+  text(0,0.66*300,paste("R32 =",round(R0etc$ngm[3,2],2)),pos=4)
   print(R0etc$ngm)
 }
 
@@ -503,8 +503,8 @@ find.R0 <- function(lhs, out,time,time.int,path,hhfreq){
     out[i,4] = R0B
     out[i,5] = f_Ah
     out[i,6] = f_Bh
-    print(ifelse(path=="A",R0A,R0B))
-    print(ifelse(path=="A",f_Ah,f_Bh))
+    print(paste("R0 =", round(ifelse(path=="A",R0A,R0B),3)))
+    print(paste("Fraction in hospital =", round(ifelse(path=="A",f_Ah,f_Bh),2)))
   }
   return(out)
 }
