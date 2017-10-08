@@ -92,7 +92,6 @@ mod.dyn <- function(t,var,par) {
   foi_A3 <- betaA3*A3/N3 + betaA2*A2*f32/N3 # We assume an individual in population 3 is equally likely to mix with an individual in population 3 as an individual in population 2
   foi_B2 <- betaB2*B2/N2 + betaB3*B3*f23/N2
   foi_B3 <- betaB3*B3/N3 + betaB2*B2*f32/N3
-  
   # Switch from A --> B and B --> A
   A2toB2 <- betaBA2*B2/N2 + betaBA3*B3*f23/N2 
   A3toB3 <- betaBA3*B3/N3 + betaBA2*B2*f32/N3 
