@@ -388,7 +388,7 @@ time.int = 365000
 xmin<-time.int/10-365
 xmax<-xmin+365*5
 ymax<-200
-col0<-grey(0.7); lty0<-2
+col0<-grey(0.7); lty0<-1
 col1<-"firebrick"; lty1<-1
 col2<-"firebrick1"; lty2<-1
 col3<-"lightcoral"; lty3<-1
@@ -410,7 +410,7 @@ years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
 axis(side=2,at=seq(0,ymax+10,25),labels=seq(0,ymax+10,25))
 legendtext<-c(expression(paste("Baseline (",omega["S"],",",omega["R"],'= 0',")")), expression(paste(omega["S"],",",omega["R"],'= 0.25')),expression(paste(omega["S"],",",omega["R"],'= 0.5')),
-              expression(paste(omega["S"],",",omega["R"],'= 1')))
+              expression(paste(omega["S"],",",omega["R"],'= 0.75')),expression(paste(omega["S"],",",omega["R"],'= 1')))
 #              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
 legend("topleft",legend=legendtext, col=c(col0,col4,col3, col2,col1,col5,col6),lty=c(lty0,lty1,lty2,lty3,lty4,lty5,lty6),lwd=lw1,bty='n')
 
@@ -427,7 +427,7 @@ years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
 axis(side=2,at=seq(0,ymax+10,25),labels=seq(0,ymax+10,25))
 legendtext<-c(expression(paste("Baseline (",omega["S"],",",omega["R"],'= 0',")")), expression(paste(omega["S"],",",omega["R"],'= 0.25')),expression(paste(omega["S"],",",omega["R"],'= 0.5')),
-              expression(paste(omega["S"],",",omega["R"],'= 1')))
+              expression(paste(omega["S"],",",omega["R"],'= 0.75')),expression(paste(omega["S"],",",omega["R"],'= 1')))
 #              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
 legend("topleft",legend=legendtext, col=c(col0,col4,col3, col2,col1,col5,col6),lty=c(lty0,lty1,lty2,lty3,lty4,lty5,lty6),lwd=lw1,bty='n')
 
@@ -471,7 +471,7 @@ time.int = 365000
 xmin<-time.int/10-365
 xmax<-xmin+365*5
 ymax<-150
-col0<-grey(0.7); lty0<-2
+col0<-grey(0.7); lty0<-1
 col1<-"firebrick"; lty1<-1
 col2<-"firebrick1"; lty2<-1
 col3<-"lightcoral"; lty3<-1
@@ -550,7 +550,7 @@ time.int = 365000
 xmin<-time.int/10-365
 xmax<-xmin+365*5
 ymax<-0.8
-col0<-grey(0.7); lty0<-2
+col0<-grey(0.7); lty0<-1
 col1<-"firebrick"; lty1<-1
 col2<-"firebrick1"; lty2<-1
 col3<-"lightcoral"; lty3<-1
@@ -569,7 +569,7 @@ years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
 axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
 legendtext<-c(expression(paste("Baseline (",omega["S"],",",omega["R"],'= 0',")")), expression(paste(omega["S"],",",omega["R"],'= 0.25')),expression(paste(omega["S"],",",omega["R"],'= 0.5')),
-              expression(paste(omega["S"],",",omega["R"],'= 1')))
+              expression(paste(omega["S"],",",omega["R"],'= 0.75')),expression(paste(omega["S"],",",omega["R"],'= 1')))
 #              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
 legend("topleft",legend=legendtext, col=c(col0,col4,col3, col2,col1,col5,col6),lty=c(lty0,lty1,lty2,lty3,lty4,lty5,lty6),lwd=lw1,bty='n')
 
@@ -584,7 +584,7 @@ years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
 axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
 legendtext<-c(expression(paste("Baseline (",omega["S"],",",omega["R"],'= 0',")")), expression(paste(omega["S"],",",omega["R"],'= 0.25')),expression(paste(omega["S"],",",omega["R"],'= 0.5')),
-              expression(paste(omega["S"],",",omega["R"],'= 1')))
+              expression(paste(omega["S"],",",omega["R"],'= 0.75')),expression(paste(omega["S"],",",omega["R"],'= 1')))
 #              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
 legend("topleft",legend=legendtext, col=c(col0,col4,col3, col2,col1,col5,col6),lty=c(lty0,lty1,lty2,lty3,lty4,lty5,lty6),lwd=lw1,bty='n')
 
