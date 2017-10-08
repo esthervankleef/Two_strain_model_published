@@ -183,15 +183,8 @@ sets2=length(unique(sens.values$betaB_hcw2p[!is.na(sens.values$betaB_hcw2p)]))
 sens.out = frac.h.sens(sets,sets2,sens.values,t,time.int,newhhfreq.vec = 0.5)
 sens.out
 
-# Run sensitivity analysis bacterial inference
-sets = length(sens.values.bi.mix$bac_inf_half)
-sets2=length(unique(sens.values$betaB_hcw2p[!is.na(sens.values$betaB_hcw2p)]))
-
-sens.out = frac.h.sens(sets,sets2,sens.values,t,time.int,newhhfreq.vec = 0.5)
-sens.out
-
 # Run sensitivity analysis bacterial inference and mixing
-sens.scen<-c("bi1","bi2","mix1","mix2") # 
+sens.scen<-c("base","bi1","bi2","mix1","mix2") # 
 l<-length(sens.scen)
 
 sensA1<-matrix(rep(NA,73001*l),ncol=l) # 73001 is time
@@ -215,7 +208,7 @@ for(i in 1:length(sens.scen)){
   print(sens.scen[i])
   #time.int<-365000
   #modpars <- c(betaA1.hcw2p, betaA1.p2hcw,betaB1.hcw2p,betaB1.p2hcw,betaA2,betaB2,betaA3,betaB3,betaAB1.hcw2p,betaBA1.hcw2p,betaAB2,betaBA2,betaAB3,betaBA3,muA1,muB1,muA2,muB2,muA3,muB3,mS1,mA1,mB1,rho, n.hcw,hhfreq,c, time.int,newhhfreq,f23,f32)   
-  modpars <- sens.values.bi.mix[,2+i]
+  modpars <- sens.values.bi.mix[,1+i]
   mod.init <-c(S1.t0,A1.t0,B1.t0,S2.t0,A2.t0,B2.t0,S3.t0,A3.t0,B3.t0,H.A1.t0,H.B1.t0,total.t0)
   mod.t <- seq(0,730000,by=10) 
   mod.sol <- lsoda(mod.init,mod.t,mod.dyn,modpars)
