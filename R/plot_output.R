@@ -381,7 +381,7 @@ mtext("Adapted to hospital",side=3,at=.3,line=1,outer=TRUE,cex=.75)
 mtext("Sensitive strain",side=3,at=.75,line=2,outer=TRUE)
 mtext("Adapted to community",side=3,at=.75,line=1,outer=TRUE,cex=.75)
 
-# FIGURE S3: change in bacterial inference and mixing
+# FIGURE S3: Incidence change in bacterial inference and mixing
 par(mfrow=c(2,2),oma=c(3,2,4,1),mar=c(1,5,1,1))
 
 time.int = 365000
@@ -410,10 +410,10 @@ legend("topleft",legend=legendtext, col=c(col0,col4,col3, col2,col1),lty=c(lty0,
 
 par(mar=c(1,1,1,4))
 plot(sensIB1[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',xlab="Time (years)",main="")
-lines(sensIB1[xmin:xmax,2], lty=lty2, lwd=lw1,col=col4)
+lines(sensIB1[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
 lines(sensIB1[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
-lines(sensIB1[xmin:xmax,4], lty=lty4,lwd=lw1,col=col2)
-lines(sensIB1[xmin:xmax,5], lty=lty4,lwd=lw1,col=col1)
+lines(sensIB1[xmin:xmax,4], lty=lty2,lwd=lw1,col=col2)
+lines(sensIB1[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
 days<-xmax-xmin
 years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
@@ -425,10 +425,10 @@ legend("topleft",legend=legendtext, col=c(col0,col4,col3,col2,col1),lty=c(lty0,l
 ymax<-50
 par(mar=c(4,5,1,1))
 plot(sensIA2and3[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',ylab="Community incidence \n(acquisitions/10,000 person days)",xlab="Time (years)",main="")
-lines(sensIA2and3[xmin:xmax,2], lty=lty2, lwd=lw1,col=col4)
+lines(sensIA2and3[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
 lines(sensIA2and3[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
-lines(sensIA2and3[xmin:xmax,4], lty=lty4,lwd=lw1,col=col2)
-lines(sensIA2and3[xmin:xmax,5], lty=lty4,lwd=lw1,col=col1)
+lines(sensIA2and3[xmin:xmax,4], lty=lty2,lwd=lw1,col=col2)
+lines(sensIA2and3[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
 days<-xmax-xmin
 years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
@@ -436,10 +436,10 @@ axis(side=2,at=seq(0,ymax+10,10),labels=seq(0,ymax+10,10))
 
 par(mar=c(4,1,1,4))
 plot(sensIB2and3[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',ylab="Community incidence \n(acquisitions/10,000 person days)",xlab="Time (years)",main="")
-lines(sensIB2and3[xmin:xmax,2], lty=lty2, lwd=lw1,col=col4)
+lines(sensIB2and3[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
 lines(sensIB2and3[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
-lines(sensIB2and3[xmin:xmax,4], lty=lty4,lwd=lw1,col=col2)
-lines(sensIB2and3[xmin:xmax,5], lty=lty4,lwd=lw1,col=col1)
+lines(sensIB2and3[xmin:xmax,4], lty=lty2,lwd=lw1,col=col2)
+lines(sensIB2and3[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
 days<-xmax-xmin
 years<-round(days/365)
 axis(side=1,at=(0:years)*365,labels=0:years)
@@ -449,6 +449,74 @@ mtext("Adapted to hospital",side=3,at=.3,line=1,outer=TRUE,cex=.75)
 mtext("Sensitive strain",side=3,at=.75,line=2,outer=TRUE)
 mtext("Adapted to community",side=3,at=.75,line=1,outer=TRUE,cex=.75)
 
+
+
+# FIGURE S4: Prevalence change in bacterial inference and mixing
+par(mfrow=c(2,2),oma=c(3,1,4,1),mar=c(1,5,1,1))
+
+time.int = 365000
+xmin<-time.int/10-365
+xmax<-xmin+365*5
+ymax<-0.8
+col0<-grey(0.7); lty0<-3
+col1<-"firebrick1"; lty1<-1
+col2<-"lightcoral"; lty2<-1
+col3<-"dodgerblue4"; lty3<-1
+col4<-"dodgerblue"; lty4<-1
+lw1<-3 #default line weight
+
+plot(sensA1[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',ylab="Hospital prevalence\n(% of patients colonized)",xlab="Time (years)",main="")
+lines(sensA1[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
+lines(sensA1[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
+lines(sensA1[xmin:xmax,4], lty=lty2, lwd=lw1,col=col2)
+lines(sensA1[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
+days<-xmax-xmin
+years<-round(days/365)
+axis(side=1,at=(0:years)*365,labels=0:years)
+axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
+legendtext<-c("Baseline", "Bacterial inference (w = 0.5)","Bacterial inference (w = 1)" ,
+              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
+legend("topleft",legend=legendtext, col=c(col0,col4,col3,col2,col1),lty=c(lty0,lty1,lty2,lty3,lty4),lwd=lw1,bty='n')
+
+par(mar=c(1,1,1,4))
+plot(sensB1[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',xlab="Time (years)",main="")
+lines(sensB1[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
+lines(sensB1[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
+lines(sensB1[xmin:xmax,4], lty=lty2, lwd=lw1,col=col2)
+lines(sensB1[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
+days<-xmax-xmin
+years<-round(days/365)
+axis(side=1,at=(0:years)*365,labels=0:years)
+axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
+legendtext<-c("Baseline", "Bacterial inference (w = 0.5)","Bacterial inference (w = 1)" ,
+              "Homogeneous mixing \n(f23 = N2/N3; f32 = N3/N2)", "No mixing (f23 = f32 = 0)") 
+legend("topleft",legend=legendtext, col=c(col0,col4,col3,col2,col1),lty=c(lty0,lty1,lty2,lty3,lty4),lwd=lw1,bty='n')
+
+par(mar=c(4,5,1,1))
+plot(sensA2and3[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',ylab="Community prevalence\n(% of patients colonized)",xlab="Time (years)",main="")
+lines(sensA2and3[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
+lines(sensA2and3[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
+lines(sensA2and3[xmin:xmax,4], lty=lty2, lwd=lw1,col=col2)
+lines(sensA2and3[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
+days<-xmax-xmin
+years<-round(days/365)
+axis(side=1,at=(0:years)*365,labels=0:years)
+axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
+
+par(mar=c(4,1,1,4))
+plot(sensB2and3[xmin:xmax,1],type='l',ylim=c(0,ymax),xaxt='n',yaxt='n',lty=lty0,lwd=lw1, col=col0,bty='n',ylab="Incidence (x10 000 person-days)",xlab="Time (years)",main="")
+lines(sensB2and3[xmin:xmax,2], lty=lty4, lwd=lw1,col=col4)
+lines(sensB2and3[xmin:xmax,3], lty=lty3, lwd=lw1,col=col3)
+lines(sensB2and3[xmin:xmax,4], lty=lty2, lwd=lw1,col=col2)
+lines(sensB2and3[xmin:xmax,5], lty=lty1,lwd=lw1,col=col1)
+days<-xmax-xmin
+years<-round(days/365)
+axis(side=1,at=(0:years)*365,labels=0:years)
+axis(side=2,at=seq(0,ymax,0.1),labels=seq(0,ymax*100,10))
+mtext("Resistant strain",side=3,at=.3,line=2,outer=TRUE)
+mtext("Adapted to hospital",side=3,at=.3,line=1,outer=TRUE,cex=.75)
+mtext("Sensitive strain",side=3,at=.75,line=2,outer=TRUE)
+mtext("Adapted to community",side=3,at=.75,line=1,outer=TRUE,cex=.75)
 
 
 
