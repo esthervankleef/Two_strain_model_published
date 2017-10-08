@@ -184,7 +184,7 @@ sens.out = frac.h.sens(sets,sets2,sens.values,t,time.int,newhhfreq.vec = 0.5)
 sens.out
 
 # Run sensitivity analysis bacterial inference and mixing
-sens.scen<-c("base","bi1","bi2","mix1","mix2") # 
+sens.scen<-c("base","bi25","bi50","bi75","bi100","mix1","mix2") # 
 l<-length(sens.scen)
 
 sensA1<-matrix(rep(NA,73001*l),ncol=l) # 73001 is time
