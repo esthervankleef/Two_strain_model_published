@@ -38,7 +38,7 @@ n=1000
 size = 5
 std <- function(x) sd(x)/sqrt(length(x))
 prob.h=0.1
-prob.c=0.05
+prob.c=0.02
 
 pirrA.h.post = rbinom(n,rqpois(n,mu=round(sum(matdIA1[Iint:Ipost_int,7])),theta=size),prob=prob.h)
 pirrA.h.pre = rbinom(n,rqpois(n,mu=round(sum(matdIA1[(Iint-365):Iint,7])),theta=size),prob=prob.h)
