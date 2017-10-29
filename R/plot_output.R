@@ -33,27 +33,28 @@ Ipost_int <- Iint+365
 
 period = 365
 
-random.seed=60
+set.seed=10
 n=1000
 size = 5
 std <- function(x) sd(x)/sqrt(length(x))
-prob=0.1
+prob.h=0.1
+prob.c=0.05
 
-pirrA.h.post = rbinom(n,rqpois(n,mu=round(sum(matdIA1[Iint:Ipost_int,7])),theta=size),prob=prob)
-pirrA.h.pre = rbinom(n,rqpois(n,mu=round(sum(matdIA1[(Iint-365):Iint,7])),theta=size),prob=prob)
+pirrA.h.post = rbinom(n,rqpois(n,mu=round(sum(matdIA1[Iint:Ipost_int,7])),theta=size),prob=prob.h)
+pirrA.h.pre = rbinom(n,rqpois(n,mu=round(sum(matdIA1[(Iint-365):Iint,7])),theta=size),prob=prob.h)
 irrA.h = pirrA.h.post/pirrA.h.pre
 
-pirrA.c.post = rbinom(n,rqpois(n,mu=round(sum(matdIA2and3[Iint:Ipost_int,7])),theta=size),prob=prob)
-pirrA.c.pre = rbinom(n,rqpois(n,mu=round(sum(matdIA2and3[(Iint-365):Iint,7])),theta=size),prob=prob)
+pirrA.c.post = rbinom(n,rqpois(n,mu=round(sum(matdIA2and3[Iint:Ipost_int,7])),theta=size),prob=prob.c)
+pirrA.c.pre = rbinom(n,rqpois(n,mu=round(sum(matdIA2and3[(Iint-365):Iint,7])),theta=size),prob=prob.c)
 irrA.c = pirrA.c.post/pirrA.c.pre
 irrA.all = (pirrA.h.post+pirrA.c.post)/(pirrA.h.pre+pirrA.c.pre)
 
-pirrB.h.post = rbinom(n,rqpois(n,mu=round(sum(matdIB1[Iint:Ipost_int,7])),theta =size),prob=prob)
-pirrB.h.pre = rbinom(n,rqpois(n,mu=round(sum(matdIB1[(Iint-365):Iint,7])),theta=size),prob=prob)
+pirrB.h.post = rbinom(n,rqpois(n,mu=round(sum(matdIB1[Iint:Ipost_int,7])),theta =size),prob=prob.h)
+pirrB.h.pre = rbinom(n,rqpois(n,mu=round(sum(matdIB1[(Iint-365):Iint,7])),theta=size),prob=prob.h)
 irrB.h = pirrB.h.post/pirrB.h.pre
 
-pirrB.c.post = rbinom(n,rqpois(n,mu=round(sum(matdIB2and3[Iint:Ipost_int,7])),theta=size),prob=prob)
-pirrB.c.pre = rbinom(n,rqpois(n,mu=round(sum(matdIB2and3[(Iint-365):Iint,7])),theta=size),prob=prob)
+pirrB.c.post = rbinom(n,rqpois(n,mu=round(sum(matdIB2and3[Iint:Ipost_int,7])),theta=size),prob=prob.c)
+pirrB.c.pre = rbinom(n,rqpois(n,mu=round(sum(matdIB2and3[(Iint-365):Iint,7])),theta=size),prob=prob.c)
 irrB.c = pirrB.c.post/pirrB.c.pre
 irrB.all = (pirrB.h.post+pirrB.c.post)/(pirrB.h.pre+pirrB.c.pre)
 
@@ -74,9 +75,9 @@ irr.data.long = data.frame(var=c(rep(1,n),rep(NA,n),rep(2,n),rep(NA,n),rep(3,n),
                                   rep("Total A",n),rep("Total FQ CDI",n),rep("Total B",n),rep("Total FS CDI",n),rep(NA,n)),
                            path1=c(rep("A",n),rep(NA,n),rep("A",n),rep(NA,n),rep("B",n),rep(NA,n),rep("B",n),rep(NA,n),rep("A",n),rep(NA,n),rep("B",n),rep(NA,n),rep(NA,n)),
                            path2=c(rep(NA,n),rep("A",n),rep(NA,n),rep("A",n),rep(NA,n),rep("B",n),rep(NA,n),rep("B",n),rep(NA,n),rep("A",n),rep(NA,n),rep("B",n),rep(NA,n)),
-                           cdi = c(rep(NA,n),rep(0.21,n),rep(NA,n),rep(0.45,n),rep(NA,n),rep(0.87,n),rep(NA,n), rep(1.14,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n)),
-                           cdiq1 = c(rep(NA,n),rep(0.13,n),rep(NA,n),rep(0.29,n),rep(NA,n),rep(0.67,n),rep(NA,n), rep(0.92,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n)),
-                           cdiq3 = c(rep(NA,n),rep(0.34,n),rep(NA,n),rep(0.71,n),rep(NA,n),rep(1.13,n),rep(NA,n), rep(1.42,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n),rep(NA,n)))
+                           cdi = c(rep(NA,n),rep(0.21,n),rep(NA,n),rep(0.45,n),rep(NA,n),rep(0.87,n),rep(NA,n), rep(1.14,n),rep(NA,n),rep(0.52,n),rep(NA,n),rep(1.02,n),rep(NA,n)),
+                           cdiq1 = c(rep(NA,n),rep(0.13,n),rep(NA,n),rep(0.29,n),rep(NA,n),rep(0.67,n),rep(NA,n), rep(0.92,n),rep(NA,n),rep(0.48,n),rep(NA,n),rep(0.97,n),rep(NA,n)),
+                           cdiq3 = c(rep(NA,n),rep(0.34,n),rep(NA,n),rep(0.71,n),rep(NA,n),rep(1.13,n),rep(NA,n), rep(1.42,n),rep(NA,n),rep(0.56,n),rep(NA,n),rep(1.08,n),rep(NA,n)))
 
 irr.data.long$type=factor(irr.data.long$type,levels=c("With hospital link FQ","With hospital link A","With hospital link FS","With hospital link B",
                                                       "No hospital link FQ","No hospital link A","No hospital link FS","No hospital link B",
@@ -108,6 +109,8 @@ print(ggplot(irr.data.long,aes(x=type,y=irr,fill=path1,group=var))+geom_vline(xi
         geom_segment(aes(x = 5, y = 0.29, xend = 5, yend = 0.71),col="darkslategray3")+
         geom_segment(aes(x = 3, y = 0.67, xend = 3, yend = 1.13),col=col3)+
         geom_segment(aes(x = 7, y = 0.92, xend = 7, yend = 1.42),col=col3)+
+        geom_segment(aes(x = 9, y = 0.48, xend = 9, yend = 0.56), col="darkslategray3")+
+        geom_segment(aes(x = 11, y = 0.97, xend = 11, yend = 1.08), col=col3)+
         scale_colour_manual("",values=c("darkslategray3",col3,"white"),
                             labels=c("Infections with resistant strain (data from [4])",
                                      "Infections with sensitive strain (data from [4])",
@@ -116,6 +119,8 @@ print(ggplot(irr.data.long,aes(x=type,y=irr,fill=path1,group=var))+geom_vline(xi
                            labels=c("Infections with resistant strain (data from [4])",
                                     "Infections with sensitive strain (data from [4])",
                                     "")))
+
+
 
 
 # FIGURE 3 - incidence and prevalence at baseline
